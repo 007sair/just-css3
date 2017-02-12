@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="gbk" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+/**
+此类用来管理QQ的动作
+比如，挤眼，走路，跳跃,听歌等
+*/
+
+function qq(){
+    this.eye_wink_flag = false;        //控制眨眼的标记
+    this.eye_flag = false;               //眼睛状态标记
+    this.words = new Array(
+        '今天的天气很好的哇,主人为何不出去走走呢？',
+        '主人辛苦了！',
+        '今天的天气可不怎么好啊',
+        '哎,又是一个情深深雨朦朦的季节！',
+        '想死了啊,糟糕！',
+        '我勒个艹！',
+        '在炎热的夏季一定要记得睡午觉哦！',
+        '据说班花在想你哦 <img src="../blog/face/f26.gif" />',
+        '多读书,多看报,少吃零食,多睡觉!'
+    );
+    this.setEyes();
+    this.setHover();
+    this.setShake();
+    this.setWords();
+}
+
+qq.prototype = {
+    //控制挤眼动作
+    setEyes: function(){
+        setInterval(function(){
+            qq.eye_wink_flag? qq.eye_wink_flag=false:qq.eye_wink_flag=true;
+        }, 5000);
+        setInterval(function(){
+            qq.eye_flag? qq.eye_flag=false:qq.eye_flag=true;
+            if ( qq.eye_wink_flag ){
+                if ( qq.eye_flag ){
+                $(".qeye").css({"-moz-transform":"scale(1,0.08)","-o-transform":"scale(1,0.08)","-webkit-transform":"scale(1,0.08)",});
+                }else{
+                $(".qeye").css({"-moz-transform":"scale(1,1)","-o-transform":"scale(1,1)","-webkit-transform":"scale(1,1)",});
+                qq.eye_wink_flag = false;
+                }
+            }
+        }, 150);
+    },
+    //当鼠标晃到眼睛上面时，眼睛闭上
+    setHover: function(){
+        $(".qeye").hover(function(){
+            $(this).css({"-moz-transform":"scale(1,0.08)","-webkit-transform":"scale(1,0.08)","-o-transform":"scale(1,0.08)","cursor":"pointer"});
+        }, function(){
+            $(this).css({"-moz-transform":"scale(1,1)","-webkit-transform":"scale(1,1)","-o-transform":"scale(1,1)"});
+        });
+    },
+    //晃动身体
+    setShake: function(){
+        setInterval(function(){
+            if ( Math.random() <= 0.5 ){
+                $("#qq_body").css({"-moz-transform":"rotate(10deg)",
+                    "-o-transform":"rotate(10deg)", "-webkit-transform":"rotate(10deg)"
+                });
+                setTimeout(function(){$("#qq_body").css({"-moz-transform":"rotate(0deg)",
+                    "-o-transform":"rotate(0deg)", "-webkit-transform":"rotate(0deg)"
+                });}, 850);
+            }else{
+                $("#qq_body").css({"-moz-transform":"rotate(-10deg)",
+                    "-o-transform":"rotate(-10deg)", "-webkit-transform":"rotate(-10deg)"
+                });                
+                setTimeout(function(){$("#qq_body").css({"-moz-transform":"rotate(0deg)",
+                    "-o-transform":"rotate(0deg)", "-webkit-transform":"rotate(0deg)"
+                });}, 850);
+            }
+        }, 30000);
+    },
+    //互动语言
+    setWords: function(){
+        setInterval(function(){
+            $("#qq_tip p").html(qq.words[Math.ceil(Math.random()*qq.words.length-1)]);
+            $("#qq_tip").css({"opacity":"1"});                
+            setTimeout(function(){$("#qq_tip p").html("");$("#qq_tip").css({"opacity":"0"});}, 6000);
+        }, 30000);
+    }
+}
+
+</script>
+<style>
+body { font-family:"Lucida Sans Unicode"; font-size:14px; color:#4b4b4b; text-align:center; }
+* { padding:0px; margin:0px; word-break:break-all; }
+
+/* 外围容器 */
+
+#container { position:relative; margin-left:auto; margin-right:auto; width:1000px; top:0;  }
+.qq { position:absolute; width:200px; height:210px; top:50px; }
+
+/* 企鹅的头部 */
+
+#qq_head { position:absolute; width:150px; height:100px; left:25px;
+    border-radius:150px 150px 150px 150px / 140px 140px 50px 50px;
+    background:-moz-radial-gradient(100px 35px, circle, rgb(70,70,70) 0%, rgb(50,50,50) 30%, rgb(30,30,30) 100%); 
+    background:-o-radial-gradient(100px 35px, circle, rgb(70,70,70) 0%, rgb(50,50,50) 30%, rgb(30,30,30) 100%);
+   
+ background:-webkit-gradient(radial, 100 35, 0, 156 36, 160, 
+from(rgb(70,70,70)), to(rgb(30,30,30)), color-stop(30%, rgb(50,50,50)));
+}
+.qeye { position:absolute; width:22px; height:32px; border-radius:100%; background:rgb(235,235,235); top:28px; 
+    box-shadow:inset 0 1px 2px rgba(0,0,0,0.8), 0 0 1px rgba(255,255,255,0.3);
+    -moz-transition:-moz-transform 0.1s linear; 
+    -o-transition:-o-transform 0.1s linear; 
+    -webkit-transition:-webkit-transform 0.1s linear;
+}
+.eyeball { position:absolute; width:12px; height:15px; border-radius:100%; background:rgb(45,45,45); 
+    box-shadow:0 1px 1px rgba(0,0,0,0.5);
+}
+#lball { left:6px; top:12px; }
+#rball { left:4px; top:12px; }
+#qleye { left:50px; }
+#qreye { left:85px; }
+#qmouth { position:absolute; width:84px; height:22px; top:62px; left:34px; border-radius:100%; 
+    box-shadow:inset 0 0 1px rgba(0,0,0,0.5), 0 0 1px rgba(255,255,255,0.3); background:rgb(255,156,6); 
+}
+#lip { position:absolute; width:64px; height:24px; border-radius:100%; background:rgb(255,156,6); top:1px; left:10px;
+    box-shadow:0 2px 1px rgb(45,45,45), inset 0 -6px 0 orange;
+}
+
+/* 企鹅的肚子 */
+
+#qq_stomach { position:absolute; width:180px; height:120px; top:75px; left:10px;
+    box-shadow:0 1px 1px rgba(0,0,0,0.5);
+    border-radius:46px 46px 160px 160px / 100px 100px 120px 120px;
+    background:-moz-linear-gradient(top, rgb(45,45,45), rgb(25,25,25));
+    background:-webkit-gradient(linear, center top, center bottom, from(rgb(45,45,45)), to(rgb(25,25,25)));
+    background:-o-linear-gradient(top, rgb(45,45,45), rgb(25,25,25));
+}
+#stomach_wrap { position:absolute; width:150px; height:100px; bottom:2px; left:15px; background:seashell;
+    border-radius:46px 46px 160px 160px / 100px 100px 120px 120px;
+}
+#stomach_wrap:before { content:'CSS3'; position:absolute; font-size:14px; left:100px; top:30px; font-weight:bold; 
+    text-shadow:0 1px 0 orange; -moz-transform:rotate(-10deg); -o-transform:rotate(-10deg); -webkit-transform:rotate(-10deg);
+}
+
+/* 企鹅的围巾 */
+
+#chief { position:absolute; width:156px; height:80px; left:22px; top:40px; }
+#chief_wrap { position:absolute; left:0; top:0; width:100%; height:100%; border-radius:100%; 
+    box-shadow:inset 0 -6px 6px rgba(0,0,0,0.5), inset 0 -22px 0 red;
+}
+#chief_tail { position:absolute; width:20px; height:40px; background:red; top:60px; left:30px; 
+    border-radius:5px 20px 5px 5px / 5px 15px 5px 5px;
+    box-shadow:inset 0 15px 15px rgba(0,0,0,0.3), 2px 2px 2px rgba(0,0,0,0.5), 2px 3px 0 darkred;
+    -moz-transform-origin:0px 10px; -webkit-transform-origin:0px 10px;
+    -moz-animation:qqwind 3s linear infinite; -webkit-animation:qqwind 3s linear infinite;
+    -moz-animation-delay:2s; -webkit-animation-delay:2s;
+}
+@-moz-keyframes qqwind {
+    30% { -moz-transform:rotate(6deg); }
+    70% { -moz-transform:rotate(-6deg); }
+}
+@-webkit-keyframes qqwind {
+    30% { -webkit-transform:rotate(6deg); }
+    70% { -webkit-transform:rotate(-6deg); }
+}
+
+/* 企鹅的双脚 */
+
+#lfoot,#rfoot { position:absolute; width:80px; height:40px; border-radius:100% / 90%; top:170px; }
+#lfoot { left:16px;
+    box-shadow:2px 2px 2px rgba(0,0,0,0.5), inset -4px -2px 2px rgba(0,0,0,0.5), inset 2px 5px 2px rgba(255,156,6,0.8);
+    background:-o-radial-gradient(0px 0px, circle, rgb(255,156,6) 0%, rgb(255,100,0) 30%, rgb(117,0,0) 100%);
+   
+ background:-webkit-gradient(radial, 0 0, 0, 10 10, 100, 
+from(rgb(255,100,0)), to(rgb(117,0,0)), color-stop(30%, 
+rgb(255,100,0)));
+    background:-moz-radial-gradient(0px 0px, circle, rgb(255,156,6) 0%, rgb(255,100,0) 30%, rgb(117,0,0) 100%); 
+}
+#rfoot { right:16px; 
+    box-shadow:-2px 2px 2px rgba(0,0,0,0.5), inset 4px -2px 2px rgba(0,0,0,0.5), inset -2px 5px 2px rgba(255,156,6,0.8);
+    background:-o-radial-gradient(100% 0%, circle, rgb(255,156,6) 0%, rgb(255,100,0) 30%, rgb(117,0,0) 100%);
+   
+ background:-webkit-gradient(radial, 80 0, 0, 70 10, 100, 
+from(rgb(255,100,0)), to(rgb(117,0,0)), color-stop(30%, 
+rgb(255,100,0)));
+    background:-moz-radial-gradient(100% 0%, circle, rgb(255,156,6) 0%, rgb(255,100,0) 30%, rgb(117,0,0) 100%); 
+}
+#lsole,#rsole { position:absolute; width:30px; height:20px; border-radius:100% / 85%; top:16px; }
+#lsole { left:3px; box-shadow:inset 3px -1px 1px rgba(0,0,0,0.3);
+    -moz-transform:rotate(16deg); -o-transform:rotate(16deg); -webkit-transform:rotate(16deg);
+}
+#rsole { right:3px; box-shadow:inset -3px -1px 1px rgba(0,0,0,0.3);
+    -moz-transform:rotate(-16deg); -o-transform:rotate(-16deg); -webkit-transform:rotate(-16deg);
+}
+
+/* 企鹅的双手 */
+
+#lhand { position:absolute; width:40px; height:100px; left:25px; top:82px;
+    background:-moz-radial-gradient(10px 85px, circle, rgb(50,50,50) 0%, rgb(45,45,45) 15%, #000 100%); 
+    background:-o-radial-gradient(10px 85px, circle, rgb(50,50,50) 0%, rgb(45,45,45) 15%, #000 100%);
+    background:-webkit-gradient(radial, 10 85, 0, 10 85, 80, from(rgb(50,50,50)), to(#000), color-stop(15%, rgb(45,45,45)));
+    border-radius:100px 20px 100px 20px / 160px 20px 200px 20px;
+    -moz-transform-origin:100% 0%; -webkit-transform-origin:100% 0%; -o-transform-origin:100% 0%;
+    -moz-transform:rotate(35deg); -webkit-transform:rotate(35deg); -o-transform:rotate(35deg);
+}
+#rhand { position:absolute; width:40px; height:100px; right:25px; top:82px;
+    background:-moz-radial-gradient(30px 85px, circle, rgb(50,50,50) 0%, rgb(45,45,45) 15%, #000 100%); 
+    background:-o-radial-gradient(30px 85px, circle, rgb(50,50,50) 0%, rgb(45,45,45) 15%, #000 100%);
+    background:-webkit-gradient(radial, 30 85, 0, 30 85, 80, from(rgb(50,50,50)), to(#000), color-stop(15%, rgb(45,45,45)));
+    border-radius:20px 100px 20px 100px / 20px 160px 20px 200px;
+    -moz-transform-origin:0 0; -webkit-transform-origin:0 0; -o-transform-origin:0 0;
+    -moz-transform:rotate(-35deg); -webkit-transform:rotate(-35deg); -o-transform:rotate(-35deg);
+}
+
+/* 企鹅的语言 */
+
+#qq_tip { position:absolute; width:210px; height:60px; background:rgb(160,160,160); left:180px; top:-40px;
+    border-radius:50%; box-shadow:inset 0 0 1px 1px orange; opacity:0;
+    -moz-transition:opacity 0.5s linear; 
+    -o-transition:opacity 0.5s linear; 
+    -webkit-transition:opacity 0.5s linear;
+}
+#qq_tip p { margin-top:15px; font-size:13px; text-align:center; width:176px; margin-left:16px; }
+#qq_tip:before { content:''; position:absolute; width:56px; height:26px; background:rgb(160,160,160); 
+    left:0; top:70px; border-radius:50%; box-shadow:inset 0 0 1px 1px orange; opacity:0.7;
+}
+
+/* 主要用于身体的摆动，本身没有什么显示效果 */
+
+#qq_body { width:100%; height:100%; 
+    -moz-transform-origin:50% 100%; 
+    -o-transform-origin:50% 100%; 
+    -webkit-transform-origin:50% 100%;
+    -moz-transition:-moz-transform 0.3s linear; 
+    -o-transition:-o-transform 0.3s linear; 
+    -webkit-transition:-webkit-transform 0.3s linear;
+}
+</style>
+
+        <title>纯css打造QQ企鹅</title>
+</head>
+<body>
+
+<section id="container">
+        <div class="qq">
+
+                <div id="lfoot"><div id="lsole"></div></div>
+                <div id="rfoot"><div id="rsole"></div></div>
+
+                <div id="qq_body">
+                        <div id="lhand"></div>
+                        <div id="rhand"></div>        
+        
+                        <div id="qq_stomach">
+                                <div id="stomach_wrap"></div>
+                        </div>
+        
+                        <div id="qq_head">
+                                <div id="qleye" class="qeye">
+                                        <div id="lball" class="eyeball"></div>
+                                </div>
+                        
+                                <div id="qreye" class="qeye">
+                                        <div id="rball" class="eyeball"></div>
+                                </div>
+                        
+                                <div id="qmouth">
+                                        <div id="lip"></div>
+                                </div>
+                        </div>
+        
+                        <div id="chief">
+                                <div id="chief_tail"></div>
+                                <div id="chief_wrap"></div>
+                        </div>
+                </div>
+
+                <div id="qq_tip"><p></p></div>
+        </div>
+</section>
+
+<script type="text/javascript">
+     var qq = new qq();
+</script>
+</body>
+</html>
